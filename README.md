@@ -19,7 +19,7 @@ TodoApplication is a simple and efficient task management app built with **React
 
 ## 📸 Screenshots
 ![Todo App Screenshot](https://github.com/Jimmyvrushabh/TodoApplication/blob/main/todo-frontend/Screenshot%20(669).png))
-*Sample screenshot of the application (replace with actual image after deployment).*
+
 
 
 ## 📡 API Endpoints
