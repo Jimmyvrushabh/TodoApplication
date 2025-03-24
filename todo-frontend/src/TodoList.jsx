@@ -14,8 +14,7 @@ const TodoList = () => {
   const fetchTodos = async () => {
     try {
       const data = await getTodos();
-      console.log("Fetched Todos:", data); // Debugging API response
-      setTodos(Array.isArray(data) ? data : []); // Ensure todos is always an array
+      setTodos(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error("Error fetching todos:", error);
       setTodos([]);
@@ -27,7 +26,7 @@ const TodoList = () => {
     const todo = await addTodo({
       title: newTodo,
       description: newDescription,
-      completed: false
+      completed: false,
     });
     setTodos([...todos, todo]);
     setNewTodo("");
@@ -39,37 +38,50 @@ const TodoList = () => {
     setTodos(todos.filter((todo) => todo.id !== id));
   };
 
-  const handleToggleTodo = async (todo) => {
-    const updatedTodo = { ...todo, completed: !todo.completed };
-    await updateTodo(todo.id, updatedTodo);
-    setTodos(todos.map((t) => (t.id === todo.id ? updatedTodo : t)));
+  const handleUpdateTodo = async (id, updatedTodo) => {
+    const todo = await updateTodo(id, updatedTodo);
+    setTodos(todos.map((t) => (t.id === id ? todo : t)));
   };
 
   return (
-    <div className="max-w-lg mx-auto mt-10">
-      <h1 className="text-2xl font-bold mb-4 text-center">To-Do List</h1>
-      <div className="mb-4">
+    <div className="max-w-2xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
+      <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">To-Do List</h1>
+
+      {/* Add Todo Form */}
+      <div className="flex flex-col sm:flex-row gap-2 mb-6">
         <input
           type="text"
-          className="w-full p-2 border rounded mb-2"
+          className="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
           placeholder="Task title..."
           value={newTodo}
           onChange={(e) => setNewTodo(e.target.value)}
         />
-        <textarea
-          className="w-full p-2 border rounded"
+        <input
+          type="text"
+          className="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
           placeholder="Task description..."
           value={newDescription}
           onChange={(e) => setNewDescription(e.target.value)}
         />
-        <button onClick={handleAddTodo} className="bg-blue-500 text-white px-4 py-2 mt-2 rounded w-full">
+        <button
+          onClick={handleAddTodo}
+          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-all"
+        >
           Add Task
         </button>
       </div>
-      <div className="space-y-2">
+
+      {/* Task List */}
+      <div className="space-y-4">
         {Array.isArray(todos) && todos.length > 0 ? (
           todos.map((todo) => (
-            <TodoItem key={todo.id} todo={todo} onDelete={handleDeleteTodo} onToggle={handleToggleTodo} />
+            <TodoItem
+              key={todo.id}
+              todo={todo}
+              onDelete={handleDeleteTodo}
+              onToggle={handleUpdateTodo}
+              onUpdate={handleUpdateTodo}
+            />
           ))
         ) : (
           <p className="text-center text-gray-500">No tasks found.</p>
