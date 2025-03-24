@@ -21,6 +21,21 @@ TodoApplication is a simple and efficient task management app built with **React
 ![Todo Application Screenshot](https://via.placeholder.com/800x400)  
 *Sample screenshot of the application (replace with actual image after deployment).*
 
+
+## 📡 API Endpoints
+
+### 📝 Todo Management APIs
+
+| Method | Endpoint            | Description           | Request Body Example |
+|--------|---------------------|-----------------------|----------------------|
+| **GET**    | `/api/todos`       | Fetch all todos       | N/A |
+| **POST**   | `/api/todos`       | Add a new todo        | `{ "title": "Buy groceries", "description": "Milk, Eggs, Bread", "completed": false }` |
+| **PUT**    | `/api/todos/{id}`  | Update a specific todo | `{ "title": "Go to gym", "description": "Workout session", "completed": true }` |
+| **DELETE** | `/api/todos/{id}`  | Delete a todo         | N/A |
+
+
+
+
 ## 🛠️ Installation & Setup
 ### 📌 Backend (Spring Boot)
 1. Clone the repository:
