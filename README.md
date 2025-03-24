@@ -18,7 +18,7 @@ TodoApplication is a simple and efficient task management app built with **React
 - **API Communication:** RESTful APIs  
 
 ## 📸 Screenshots
-![Todo App Screenshot](todo-frontend/screenshot.png)
+![Todo App Screenshot](todo-frontend/screenshot(667).png)
 *Sample screenshot of the application (replace with actual image after deployment).*
 
 
