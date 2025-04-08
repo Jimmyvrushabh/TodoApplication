@@ -4,7 +4,7 @@ import TodoItem from "./TodoItem";
 
 const TodoList = () => {
   const [todos, setTodos] = useState([]);
-  const [newTodo, setNewTodo] = useState("");
+  const [newTitle, setNewTitle] = useState("");
   const [newDescription, setNewDescription] = useState("");
 
   useEffect(() => {
@@ -22,14 +22,16 @@ const TodoList = () => {
   };
 
   const handleAddTodo = async () => {
-    if (newTodo.trim() === "") return;
-    const todo = await addTodo({
-      title: newTodo,
-      description: newDescription,
-      completed: false,
+    if (newTitle.trim() === "" || newDescription.trim() === "") return;
+
+    const todo = await addTodo({ 
+      title: newTitle, 
+      description: newDescription, 
+      completed: false 
     });
+
     setTodos([...todos, todo]);
-    setNewTodo("");
+    setNewTitle("");
     setNewDescription("");
   };
 
@@ -43,44 +45,55 @@ const TodoList = () => {
     setTodos(todos.map((t) => (t.id === id ? todo : t)));
   };
 
-  return (
-    <div className="max-w-2xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
-      <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">To-Do List</h1>
+  // ✅ Toggle Completed State
+  const handleToggleComplete = async (id) => {
+    const updatedTodos = todos.map((todo) =>
+      todo.id === id ? { ...todo, completed: !todo.completed } : todo
+    );
+    setTodos(updatedTodos);
 
-      {/* Add Todo Form */}
-      <div className="flex flex-col sm:flex-row gap-2 mb-6">
+    // Send updated status to backend
+    const todo = todos.find((todo) => todo.id === id);
+    await updateTodo(id, { ...todo, completed: !todo.completed });
+  };
+
+  return (
+    <div className="max-w-lg mx-auto mt-10">
+      <h1 className="text-2xl font-bold mb-4 text-center">To-Do List</h1>
+
+      {/* Input Form */}
+      <div className="flex flex-col space-y-2 mb-4">
         <input
           type="text"
-          className="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+          className="w-full p-2 border rounded"
           placeholder="Task title..."
-          value={newTodo}
-          onChange={(e) => setNewTodo(e.target.value)}
+          value={newTitle}
+          onChange={(e) => setNewTitle(e.target.value)}
         />
         <input
           type="text"
-          className="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+          className="w-full p-2 border rounded"
           placeholder="Task description..."
           value={newDescription}
           onChange={(e) => setNewDescription(e.target.value)}
         />
-        <button
-          onClick={handleAddTodo}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-all"
-        >
+        <button 
+          onClick={handleAddTodo} 
+          className="bg-blue-500 text-white px-4 py-2 rounded">
           Add Task
         </button>
       </div>
 
-      {/* Task List */}
-      <div className="space-y-4">
-        {Array.isArray(todos) && todos.length > 0 ? (
+      {/* Todo List */}
+      <div className="space-y-2">
+        {todos.length > 0 ? (
           todos.map((todo) => (
-            <TodoItem
-              key={todo.id}
-              todo={todo}
-              onDelete={handleDeleteTodo}
-              onToggle={handleUpdateTodo}
-              onUpdate={handleUpdateTodo}
+            <TodoItem 
+              key={todo.id} 
+              todo={todo} 
+              onDelete={handleDeleteTodo} 
+              onUpdate={handleUpdateTodo} 
+              onToggle={handleToggleComplete} // ✅ Pass the toggle function
             />
           ))
         ) : (
